@@ -2,37 +2,58 @@
 
 > A [Gatsby](https://github.com/gatsbyjs/gatsby) plugin for
 > [react-redux](https://github.com/reduxjs/react-redux) with
-> built-in server-side rendering support.
+> built-in server-side rendering support, redux persistance store and adding more providers to existing ones.
 
 ## Install
 
-`npm install --save gatsby-plugin-react-redux react-redux redux`
+`npm install --save gatsby-plugin-react-redux-providers react-redux redux-persist redux`
 
 ## How to use
 
 `./src/state/createStore.js` // same path you provided in gatsby-config
+`./src/providers/index.js` // same path you provided in gatsby-config
+
 ```javascript
-import { createStore } from 'redux';
+import { combineReducers, configureStore, StateFromReducersMapObject } from '@reduxjs/toolkit';
+import { persistStore, persistReducer } from 'redux-persist';
+import sessionStorage from 'redux-persist/es/storage/session';
 
-function reducer() {
-  //...
-}
+const reducers = {
+  ...
+};
 
-// preloadedState will be passed in by the plugin
-export default preloadedState => {
-  return createStore(reducer, preloadedState);
+const persistConfig = {
+  key: 'root',
+  storage: sessionStorage,
+};
+
+const persistedReducer = persistReducer(persistConfig, combineReducers(reducers));
+const store = configureStore({
+  reducer: persistedReducer,
+  preloadedState: {},
+  devTools: process.env.NODE_ENV === 'development',
+});
+
+export type Dispatch = typeof store.dispatch;
+export type IRootState = StateFromReducersMapObject<typeof reducers>;
+
+export default () => {
+  const persistor = persistStore(store);
+  return { store, persistor };
 };
 ```
 
 `./gatsby-config.js`
+
 ```javascript
 module.exports = {
   plugins: [
     {
-      resolve: `gatsby-plugin-react-redux`,
+      resolve: `gatsby-plugin-react-redux-providers`,
       options: {
         // [required] - path to your createStore module
-        pathToCreateStoreModule: './src/state/createStore',
+        pathToCreateStoreModule: './src/store/index',
+        pathToCreateProviders: './src/providers/index',
         // [optional] - options passed to `serialize-javascript`
         // info: https://github.com/yahoo/serialize-javascript#options
         // will be merged with these defaults:
@@ -53,6 +74,11 @@ module.exports = {
   ],
 };
 ```
+
+## Thanks
+
+Thanks to [Leonid Nikiforenko](https://github.com/le0nik/) for original [plugin](https://github.com/le0nik/gatsby-plugin-react-redux/).
+and [Andrea Valla](https://github.com/avalla/) for improving it with her version of [plugin](https://github.com/avalla/gatsby-plugin-react-redux-persist/) adding redux-persist package.
 
 ## License
 
