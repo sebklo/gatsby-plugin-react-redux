@@ -2,12 +2,13 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import createStore from './.tmp/createStore';
 import { DEFAULT_OPTIONS, SCRIPT_ELEMENT_ID } from './constants';
+import Providers from './.tmp/providers/index'
 
 export const wrapRootElement = ({ element }, pluginOptions = {}) => {
   const preloadedState = window[pluginOptions.windowKey ?? DEFAULT_OPTIONS.windowKey];
   const store = createStore(preloadedState);
 
-  return <Provider store={store}>{element}</Provider>;
+  return <Provider store={store}><Providers>{element}</Providers></Provider>;
 };
 
 export const onInitialClientRender = (_, pluginOptions = {}) => {

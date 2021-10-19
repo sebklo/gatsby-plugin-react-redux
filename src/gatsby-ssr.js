@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import serializeJavascript from 'serialize-javascript';
 import createStore from './.tmp/createStore';
 import { DEFAULT_OPTIONS, SCRIPT_ELEMENT_ID } from './constants';
+import Providers from "./.tmp/providers"
 
 const pageStores = new Map();
 
@@ -10,7 +11,7 @@ export const wrapRootElement = ({ element, pathname }) => {
   const store = createStore();
   pageStores.set(pathname, store);
 
-  return <Provider store={store}>{element}</Provider>;
+  return <Provider store={store}><Providers>{element}</Providers></Provider>;
 };
 
 export const onRenderBody = (

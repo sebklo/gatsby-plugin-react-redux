@@ -6,11 +6,14 @@ import util from 'util';
 const mkdirAsync = util.promisify(fs.mkdir);
 const writeFileAsync = util.promisify(fs.writeFile);
 
-export const onPreBootstrap = ({ store }, { pathToCreateStoreModule } = {}) => {
+export const onPreBootstrap = ({ store }, { pathToCreateStoreModule, pathToCreateProviders } = {}) => {
   if (!pathToCreateStoreModule) {
     throw new Error(
       '[gatsby-plugin-react-redux]: missing required option "pathToCreateStoreModule"',
     );
+  }
+  if (!pathToCreateProviders) {
+    '[gatsby-plugin-react-redux]: missing required option "pathToCreateProviders"',
   }
 
   const { program } = store.getState();
@@ -21,8 +24,15 @@ export const onPreBootstrap = ({ store }, { pathToCreateStoreModule } = {}) => {
       ? pathToCreateStoreModule
       : path.join(program.directory, pathToCreateStoreModule)
   }")`;
+  let module2 = `module.exports = require("${
+    path.isAbsolute(pathToCreateProviders)
+      ? pathToCreateProviders
+      : path.join(program.directory, pathToCreateProviders)
+  }")`;
+
   if (os.platform() === 'win32') {
     module = module.split('\\').join('\\\\');
+    module2 = module2.split('\\').join('\\\\');
   }
 
   const dir = `${__dirname}/.tmp`;
@@ -32,5 +42,8 @@ export const onPreBootstrap = ({ store }, { pathToCreateStoreModule } = {}) => {
     promise = promise.then(() => mkdirAsync(dir));
   }
 
-  return promise.then(() => writeFileAsync(`${dir}/createStore.js`, module));
+  return promise.then(() => {
+    writeFileAsync(`${dir}/createStore.js`, module)
+    writeFileAsync(`${dir}/index.ts`, module2)
+});
 };
