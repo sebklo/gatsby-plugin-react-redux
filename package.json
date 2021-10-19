@@ -52,10 +52,10 @@
     "react-redux": "^7.0.3",
     "redux": "^4.0.5"
   },
-  "homepage": "https://github.com/le0nik/gatsby-plugin-react-redux/tree/master#readme",
-  "repository": "https://github.com/le0nik/gatsby-plugin-react-redux",
+  "homepage": "https://github.com/sebklo/gatsby-plugin-react-redux",
+  "repository": "https://github.com/sebklo/gatsby-plugin-react-redux",
   "bugs": {
-    "url": "https://github.com/le0nik/gatsby-plugin-react-redux/issues"
+    "url": "https://github.com/sebklo/gatsby-plugin-react-redux/issues"
   },
   "jest": {
     "roots": [
