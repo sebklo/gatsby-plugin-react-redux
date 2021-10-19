@@ -1,4 +1,4 @@
-# gatsby-plugin-react-redux
+# gatsby-plugin-react-redux-providers
 
 > A [Gatsby](https://github.com/gatsbyjs/gatsby) plugin for
 > [react-redux](https://github.com/reduxjs/react-redux) with
@@ -77,7 +77,7 @@ module.exports = {
 
 ## Thanks
 
-Thanks to [Leonid Nikiforenko](https://github.com/le0nik/) for original [plugin](https://github.com/le0nik/gatsby-plugin-react-redux/).
+Thanks to [Leonid Nikiforenko](https://github.com/le0nik/) for original [plugin](https://github.com/le0nik/gatsby-plugin-react-redux/)
 and [Andrea Valla](https://github.com/avalla/) for improving it with her version of [plugin](https://github.com/avalla/gatsby-plugin-react-redux-persist/) adding redux-persist package.
 
 ## License
